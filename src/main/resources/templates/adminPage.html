@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <title>Admin page</title>
+</head>
+<body>
+
+<form th:action="@{/logout}" method="post">
+    <input type="submit" value="Sign Out"/>
+</form>
+
+<div style="display: inline-block" th:each="prod: ${prods}">
+    <form th:action="@{/checkClickedButton}" method="get">
+        <input type="button" th:value="${prod}">
+    </form>
+</div>
+
+
+
+</body>
+</html>

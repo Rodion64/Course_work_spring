@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:form="http://www.w3.org/1999/html">
+<head>
+    <title>Registration</title>
+</head>
+<body>
+<span style="color: red" th:name="errorAcc"></span>
+<form action="/registrationAcc" method="get">
+    <div>
+        <label> User Name : <input type="text" name="name" th:value="${currentName}"/> </label>
+        <span style="color: red" th:text="${name}"></span>
+    </div>
+    <div>
+        <label> E-mail: <input type="text" name="email" th:value="${currentEmail}"/> </label>
+        <span style="color: red" th:text="${email}"></span>
+    </div>
+    <div>
+        <label> Password: <input type="password" name="password" th:value="${currentPassword}"/> </label>
+        <span style="color: red" th:text="${password}"></span>
+    </div>
+    <div>
+        <label>Admin: <input type="checkbox" name="role" value="ADMIN"/></label>
+    </div>
+    <div>
+        <label>User: <input type="checkbox" name="role" value="USER"/></label>
+    </div>
+    <div><input type="submit" value="Sign In"/></div>
+</form>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <label>
+        Login
+        <p th:text="${name}"></p>
+    </label>
+
+    <label  th:if="${realName} != ''">
+        Имя
+        <p th:text="${realName}"></p>
+    </label>
+
+    <label th:if="${surname} != ''">
+        Surname
+        <p th:text="${surname}"></p>
+    </label>
+
+    <label th:if="${phone} != ''">
+        PhoneNumber
+        <p th:text="${phone}"></p>
+    </label>
+    <label th:if="${address} != ''">
+        Address
+        <p th:text="${address}"></p>
+    </label>
+
+    <form th:action="@{/user/updateUser}" method="post">
+        <div>
+            Имя
+            <input type="text" name="realName" th:value="${currentRealName}">
+            <span style="color: red" th:text="${realNameErr}"></span>
+        </div>
+        <div>
+            Фамилия
+            <input type="text" name="surname" th:value="${currentSurname}">
+            <span style="color: red" th:text="${surnameErr}"></span>
+
+        </div>
+        <div>
+            номер телефона
+            <input type="tel" name="phone" th:value="${currentPhone}">
+            <span style="color: red" th:text="${phoneErr}"></span>
+        </div>
+        <div>
+            Адрес
+            <input type="text" name="address" th:value="${currentAddress}">
+            <span style="color: red" th:text="${addressErr}"></span>
+        </div>
+
+        <input type="submit" value="submit">
+    </form>
+
+    <form th:action="@{/user/updatePassword}" method="post">
+        <h2>Блок смены пароля</h2>
+        <div>
+            Введите старый пароль:
+            <input type="text" name="oldPassword" required>
+            <span style="color: red" th:text="${oldPasswordErr}"></span>
+        </div>
+        <div>
+            Введите новый пароль: <input type="text" name="passwordFirstTry" required>
+        </div>
+        <div>
+            Подтвердите ввод: <input type="text" name="passwordSecondTry" required>
+            <span style="color: red" th:text="${newPasswordErr}"></span>
+        </div>
+        <input type="submit" value="Изменить пароль">
+    </form>
+</body>
+</html>
