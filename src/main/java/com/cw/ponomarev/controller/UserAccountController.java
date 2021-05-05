@@ -22,6 +22,11 @@ public class UserAccountController {
         this.service = service;
     }
 
+    @GetMapping("")
+    public String getUserFirstPage(){
+        return "main";
+    }
+
     @GetMapping("/userAccount")
     public String getUserAccDet(Model model, HttpServletRequest request){
         User currentUser = service.getUserByName(SecurityContextHolder.getContext().getAuthentication().getName());
@@ -48,8 +53,7 @@ public class UserAccountController {
                            @ModelAttribute("address") String address,
                              @ModelAttribute("realName") String realName,
                              @ModelAttribute("surname") String surname,
-                             RedirectAttributes redirectAttributes
-    ) {
+                             RedirectAttributes redirectAttributes) {
         boolean falseFlag = false;
         User user = service.getUserByName(SecurityContextHolder.getContext().getAuthentication().getName());
 

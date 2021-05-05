@@ -26,7 +26,7 @@ public class User implements UserDetails {
     private String name;
 
     @Email(message = "incorrect email address")
-    @NotBlank(message = "not empry")
+    @NotBlank(message = "not empty")
     @NotNull(message = "not null")
     private String email;
 

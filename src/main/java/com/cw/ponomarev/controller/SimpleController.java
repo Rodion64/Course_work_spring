@@ -3,6 +3,7 @@ package com.cw.ponomarev.controller;
 import com.cw.ponomarev.back.UserService;
 import com.cw.ponomarev.model.Role;
 import com.cw.ponomarev.model.User;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -20,10 +21,6 @@ public class SimpleController {
         this.service = service;
     }
 
-//    @GetMapping("/main")
-//    public String getMain(){
-//        return "main";
-//    }
 
     @GetMapping("/registration")
     public String registrationForm() {
@@ -35,4 +32,12 @@ public class SimpleController {
         return service.addUser(user, errors, role, model);
     }
 
+    @GetMapping("")
+    public String afterLogin(@AuthenticationPrincipal User user){
+        if(user.getRoles().contains(Role.USER)){
+            return "redirect:/user";
+        } else {
+            return "redirect:/admin";
+        }
+    }
 }

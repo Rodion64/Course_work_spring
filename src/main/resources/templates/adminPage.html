@@ -10,13 +10,51 @@
     <input type="submit" value="Sign Out"/>
 </form>
 
-<div style="display: inline-block" th:each="prod: ${prods}">
+<div  th:each="prod: ${prods}">
     <form th:action="@{/checkClickedButton}" method="get">
         <input type="button" th:value="${prod}">
     </form>
 </div>
 
-
+<h2>Добавить новую позицию товара</h2>
+<div>
+    <form th:action="@{/admin/addNewPosition}" method="post">
+        <div>
+            <label>Тип товара</label>
+            <select name="type">
+                <option th:each="prodd: ${prodss}" th:value = "${prodd}" th:text="${prodd}"></option>
+            </select>
+        </div>
+        <div>
+            <label>Название товара</label>
+            <input type="text" name="title" th:value="${currentTitle}">
+            <span style="color: red" th:text="${title}"></span>
+        </div>
+        <div>
+            <label>Описание товара</label>
+            <input type="text" name="description" th:value="${currentDescription}">
+            <span style="color: red" th:text="${description}"></span>
+        </div>
+        <div>
+            <label>Доступность</label>
+            <select name="availability">
+                <option>Есть на складе</option>
+                <option>Нет в наличии</option>
+            </select>
+        </div>
+        <div>
+            <label>Количество товара</label>
+            <input type="number" name="number" min="0" th:value="${currentNumber}">
+            <span style="color: red" th:text="${number}"></span>
+        </div>
+        <div>
+            <label>Цена</label>
+            <input type="number" name="price" th:value="${currentPrice}">
+            <span style="color: red" th:text="${price}"></span>
+        </div>
+        <input type="submit" value="Добавить">
+    </form>
+</div>
 
 </body>
 </html>
