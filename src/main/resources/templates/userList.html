@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table>
+    <thead>
+    <tr>
+        <th> ID </th>
+        <th> Login </th>
+        <th> E-mail </th>
+        <th> First name </th>
+        <th> Surname </th>
+        <th> Phone </th>
+        <th> Active </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users}">
+        <td><span th:text="${user.id}"> ID </span></td>
+        <td><span th:text="${user.name}"> Login </span></td>
+        <td><span th:text="${user.email}"> E-mail </span></td>
+        <td><span th:text="${user.realName}"> First name </span></td>
+        <td><span th:text="${user.surname}"> Surname </span></td>
+        <td><span th:text="${user.phone}"> Phone </span></td>
+        <td><span th:text="${user.active}"> Active </span></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

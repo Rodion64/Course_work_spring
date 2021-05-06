@@ -6,10 +6,8 @@ import com.cw.ponomarev.model.ProductType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
@@ -44,7 +42,12 @@ public class AdminController {
     }
 
     @PostMapping("/addNewPosition")
-    public String addNewPosition(@ModelAttribute @Valid Product product, Errors errors, Model model, RedirectAttributes redirectAttributes){
-         return  service.addNewPos(product, errors, redirectAttributes);
+    public String addNewPosition(@ModelAttribute @Valid Product product, Errors errors, RedirectAttributes redirectAttributes, @RequestParam(name = "image") MultipartFile file){
+         return  service.addNewPos(product, file, errors, redirectAttributes);
+    }
+
+    @GetMapping("/userList")
+    public String getUserList(Model model){
+        return service.userList(model);
     }
 }

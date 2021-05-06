@@ -18,7 +18,7 @@
 
 <h2>Добавить новую позицию товара</h2>
 <div>
-    <form th:action="@{/admin/addNewPosition}" method="post">
+    <form enctype="multipart/form-data" th:action="@{/admin/addNewPosition}" method="post">
         <div>
             <label>Тип товара</label>
             <select name="type">
@@ -41,6 +41,7 @@
                 <option>Есть на складе</option>
                 <option>Нет в наличии</option>
             </select>
+            <span style="color: red" th:text="${availabilityErr}"></span>
         </div>
         <div>
             <label>Количество товара</label>
@@ -52,8 +53,20 @@
             <input type="number" name="price" th:value="${currentPrice}">
             <span style="color: red" th:text="${price}"></span>
         </div>
+        <div>
+            <label>Изображение товара</label>
+            <input type="file" name="image">
+            <span style="color: red" th:text="${fileErr}"></span>
+        </div>
+        <span style="color: red" th:text="${exists}"></span>
         <input type="submit" value="Добавить">
     </form>
+</div>
+
+<div>
+    <a th:href="@{/admin/userList}">
+        <h2>Посмотреть список юзеров</h2>
+    </a>
 </div>
 
 </body>

@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
 
@@ -23,20 +24,24 @@ public class Product {
     @Enumerated(EnumType.STRING)
     private Set<ProductType> type;
 
-    @NotNull(message = "Should be not null")
-    @NotBlank(message = "Should be not blank")
+    @NotNull(message = "Обязательное поле для заполнения")
+    @NotBlank(message = "Обязательное поле для заполнения")
+    @NotEmpty(message = "Обязательное поле для заполнения")
     private String title;
 
-    @NotNull(message = "Should be not null")
-    @NotBlank(message = "Should be not blank")
+    @NotNull(message = "Обязательное поле для заполнения")
+    @NotBlank(message = "Обязательное поле для заполнения")
+    @NotEmpty(message = "Обязательное поле для заполнения")
     private String description;
 
     private String availability;
 
     @Min(value = 0, message = "Количество товара должно быть >= 0")
+    @NotNull(message = "Количество товара не должно быть пустым или меньше 0")
     private Long number;
 
     @Min(value = 0, message = "Цена не может быть отрицательной")
+    @NotNull(message = "Цена товара не должна быть пустой или меньше 0")
     private Long price;
 
     @Column(name = "image_url")
