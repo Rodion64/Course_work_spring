@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Change product</title>
+</head>
+<body>
+    <h2>Изменение продукта</h2>
+ <form th:action="@{/admin/changeProduct/{id} (id = ${currentProduct.getId()})}" method="post" th:object="${currentProduct}">
+     <div>
+         <label> Product Title : <input type="text" th:field="*{title}"/> </label>
+         <span style="color: red" th:text="${titleErr}"></span>
+     </div>
+     <div>
+         <label> Description: <input type="text" th:field="*{description}"/> </label>
+         <span style="color: red" th:text="${descriptionErr}"></span>
+     </div>
+     <div>
+         <label> Number of products <input type="number" th:field="*{number}" min="0"/> </label>
+     </div>
+     <select th:field="*{type}">
+         <option value=""> -- </option>
+         <option th:each="selectingType : ${types}" th:value="${selectingType}" th:text="${selectingType}"></option>
+     </select>
+     <span style="color: red" th:text="${selectingTypeErr}"></span>
+     <div><input type="submit" value="Save changes"/></div>
+ </form>
+
+</body>
+</html>

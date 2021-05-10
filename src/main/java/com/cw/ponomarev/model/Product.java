@@ -16,7 +16,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class Product {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @ElementCollection(targetClass = ProductType.class, fetch = FetchType.EAGER)

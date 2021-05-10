@@ -13,6 +13,7 @@ import org.springframework.web.servlet.support.RequestContextUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Map;
 
 
@@ -49,5 +50,25 @@ public class AdminController {
     @GetMapping("/userList")
     public String getUserList(Model model){
         return service.userList(model);
+    }
+
+    @GetMapping("/checkClickedButton/{prod}")
+    public String checkButton(Model model, @PathVariable(name = "prod") ProductType type, RedirectAttributes redirectAttributes){
+        return service.getCheckedListForm(model, type, redirectAttributes);
+    }
+
+    @PostMapping("/deleteProduct/{id}")
+    public String deleteProduct(@PathVariable(name = "id") Long id){
+        return service.deleteProd(id);
+    }
+
+    @GetMapping("/changeProduct/{id}")
+    public String changeProduct(@PathVariable(name = "id") Long id, Model model){
+        return service.changeProductForm(id, model);
+    }
+
+    @PostMapping("/changeProduct/{id}")
+    public String changeProduct(Product product, RedirectAttributes redirectAttributes, @PathVariable(name = "id") Long id){
+        return
     }
 }
