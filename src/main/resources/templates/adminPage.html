@@ -56,14 +56,6 @@
             <span style="color: red" th:text="${description}"></span>
         </div>
         <div>
-            <label>Доступность</label>
-            <select name="availability">
-                <option>Есть на складе</option>
-                <option>Нет в наличии</option>
-            </select>
-            <span style="color: red" th:text="${availabilityErr}"></span>
-        </div>
-        <div>
             <label>Количество товара</label>
             <input type="number" name="number" min="0" th:value="${currentNumber}">
             <span style="color: red" th:text="${number}"></span>

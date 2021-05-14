@@ -18,13 +18,33 @@
      <div>
          <label> Number of products <input type="number" th:field="*{number}" min="0"/> </label>
      </div>
+     <div>
+         <label> Price of product <input type="number" th:field="*{price}" min="0"/> </label>
+     </div>
      <select th:field="*{type}">
          <option value=""> -- </option>
-         <option th:each="selectingType : ${types}" th:value="${selectingType}" th:text="${selectingType}"></option>
-     </select>
-     <span style="color: red" th:text="${selectingTypeErr}"></span>
-     <div><input type="submit" value="Save changes"/></div>
- </form>
+    <option th:each="selectingType : ${types}" th:value="${selectingType}" th:text="${selectingType}"></option>
+    </select>
+    <span style="color: red" th:text="${selectingTypeErr}"></span>
+    <div><input type="submit" value="Save changes"/></div>
+    </form>
+    <div>
+        <form th:method="get" th:action="@{/admin/changeImage/{id} (id = ${currentProduct.getId()})}">
+            <input type="submit">Изменить изоображение</input>
+        </form>
+    </div>
+
+    <form enctype="multipart/form-data" th:action = "@{/admin/changeImage/{id} (id = ${product.getId()})}" method="post" th:object = "${product}">
+        <div>
+            Текущее изображение товара:
+            <img th:src="@{'/images/'+${product.getImageUrl()}}" height="400px"/>
+        </div>
+        <div>
+            Новое изображение товара:
+            <input type="file" text="Изображение товара">
+            <span style="color : red" th:value="${imgErr}"></span>
+        </div>
+    </form>
 
 </body>
 </html>

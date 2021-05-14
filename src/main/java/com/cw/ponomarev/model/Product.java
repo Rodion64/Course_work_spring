@@ -14,9 +14,10 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class Product {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ElementCollection(targetClass = ProductType.class, fetch = FetchType.EAGER)
@@ -34,8 +35,6 @@ public class Product {
     @NotEmpty(message = "Обязательное поле для заполнения")
     private String description;
 
-    private String availability;
-
     @Min(value = 0, message = "Количество товара должно быть >= 0")
     @NotNull(message = "Количество товара не должно быть пустым или меньше 0")
     private Long number;
@@ -46,4 +45,14 @@ public class Product {
 
     @Column(name = "image_url")
     private String imageUrl;
+
+    public void setForChange(Set<ProductType> type, String title, String description, Long number, Long price){
+        this.type = type;
+        this.title = title;
+        this.description = description;
+        this.number = number;
+        this.price = price;
+    }
+
+
 }

@@ -56,14 +56,6 @@ public class AdminService {
             redirectAttributes.addFlashAttribute("exists", "Товар с таким названием уже существует");
         }
 
-        if(product.getNumber() != null) {
-            if (product.getNumber() == 0 && product.getAvailability().equals("Есть на складе")) {
-                flagOfErrors = true;
-                redirectAttributes.addFlashAttribute("availabilityErr", "Товар не может быть на складе с указанным количеством");
-            }
-        }
-
-
         if(!file.getOriginalFilename().equals("")) {
             String uuid = UUID.randomUUID().toString();
             String nameOfFile = uuid + file.getOriginalFilename();
@@ -114,56 +106,34 @@ public class AdminService {
         return "change_product";
     }
 
-    public String changeProduct(Product product, Errors errors, RedirectAttributes redirectAttributes){
+    public String changeProduct(Product product, RedirectAttributes redirectAttributes, Long id){
         boolean flagOfErrors = false;
 
-        if(errors.hasErrors()){
+        Product dataBaseProduct = repository.findById(id).get();
+
+        if(product.getTitle().equals("")){
             flagOfErrors = true;
-
-            redirectAttributes.addFlashAttribute("currentTitle", product.getTitle());
-            redirectAttributes.addFlashAttribute("currentDescription", product.getDescription());
-            redirectAttributes.addFlashAttribute("currentNumber", product.getNumber());
-            redirectAttributes.addFlashAttribute("currentPrice", product.getPrice());
-
-            List<FieldError> list = errors.getFieldErrors();
-            for (FieldError f : list) {
-                redirectAttributes.addFlashAttribute(f.getField(), f.getDefaultMessage());
-            }
+            redirectAttributes.addFlashAttribute("titleErr", "Обязательное поле для заполнения");
         }
-
-        if(repository.findByTitle(product.getTitle()) != null) {
+        if(product.getDescription().equals("")){
             flagOfErrors = true;
-            redirectAttributes.addFlashAttribute("exists", "Товар с таким названием уже существует");
+            redirectAttributes.addFlashAttribute("descriptionErr", "Обязательное поле для заполнения");
+        }
+        if(product.getType().isEmpty()){
+            redirectAttributes.addFlashAttribute("selectingTypeErr", "Необходимо выбрать тип товара");
+        }
+        if (!flagOfErrors){
+            dataBaseProduct.setForChange(product.getType(), product.getTitle(), product.getDescription(), product.getNumber(), product.getPrice());
+            repository.save(dataBaseProduct);
+            return "redirect:/admin";
         }
 
-        if(product.getNumber() != null) {
-            if (product.getNumber() == 0 && product.getAvailability().equals("Есть на складе")) {
-                flagOfErrors = true;
-                redirectAttributes.addFlashAttribute("availabilityErr", "Товар не может быть на складе с указанным количеством");
-            }
-        }
+        return "redirect:/admin/changeProduct/" + id;
+    }
 
-
-        if(!file.getOriginalFilename().equals("")) {
-            String uuid = UUID.randomUUID().toString();
-            String nameOfFile = uuid + file.getOriginalFilename();
-            String filePath = uploadPath + "/" + nameOfFile;
-
-            product.setImageUrl(nameOfFile);
-            try {
-                file.transferTo(new File(filePath));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        } else {
-            flagOfErrors = true;
-            redirectAttributes.addFlashAttribute("fileErr", "Файл должен иметь название и не должен быть пустым");
-        }
-
-        if (!flagOfErrors)
-            repository.save(product);
-
-        return "redirect:/admin";
+    public String changeImageForm(Long id, Model model){
+        Product productBD = repository.findById(id).get();
+        model.addAttribute("product", productBD);
+        return "change_image";
     }
 }

@@ -67,8 +67,15 @@ public class AdminController {
         return service.changeProductForm(id, model);
     }
 
+    //Квуфудадидабифиждбц
     @PostMapping("/changeProduct/{id}")
-    public String changeProduct(Product product, RedirectAttributes redirectAttributes, @PathVariable(name = "id") Long id){
-        return
+    public String changeProduct(@ModelAttribute Product product, RedirectAttributes redirectAttributes, @PathVariable(name = "id") Long id){
+        System.out.println(product);
+        return service.changeProduct(product, redirectAttributes, id);
+    }
+
+    @GetMapping("/changeImage/{id}")
+    public String changeImageForm(@PathVariable(name = "id") Long id, Model model){
+        return service.changeImageForm(id, model);
     }
 }
