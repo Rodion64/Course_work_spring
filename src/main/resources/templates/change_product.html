@@ -6,7 +6,7 @@
 </head>
 <body>
     <h2>Изменение продукта</h2>
- <form th:action="@{/admin/changeProduct/{id} (id = ${currentProduct.getId()})}" method="post" th:object="${currentProduct}">
+ <form th:action="@{/admin/changeProduct/{id} (id = ${currentProduct.getId()})}" th:object="${currentProduct}">
      <div>
          <label> Product Title : <input type="text" th:field="*{title}"/> </label>
          <span style="color: red" th:text="${titleErr}"></span>
@@ -33,18 +33,5 @@
             <input type="submit">Изменить изоображение</input>
         </form>
     </div>
-
-    <form enctype="multipart/form-data" th:action = "@{/admin/changeImage/{id} (id = ${product.getId()})}" method="post" th:object = "${product}">
-        <div>
-            Текущее изображение товара:
-            <img th:src="@{'/images/'+${product.getImageUrl()}}" height="400px"/>
-        </div>
-        <div>
-            Новое изображение товара:
-            <input type="file" text="Изображение товара">
-            <span style="color : red" th:value="${imgErr}"></span>
-        </div>
-    </form>
-
 </body>
 </html>

@@ -12,9 +12,10 @@
     </div>
     <div>
         Новое изображение товара:
-        <input type="file" text="Изображение товара">
-        <span style="color : red" th:value="${imgErr}"></span>
+        <input type="file" text="Изображение товара" name="newImage">
+        <span style="color:red" th:value="${imgErr}"></span>
     </div>
+    <input type="submit">Отправить</input>
 </form>
 </body>
 </html>

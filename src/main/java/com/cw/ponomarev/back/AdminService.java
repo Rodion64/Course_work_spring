@@ -136,4 +136,26 @@ public class AdminService {
         model.addAttribute("product", productBD);
         return "change_image";
     }
+
+    public String changeImage(Long id, MultipartFile img, RedirectAttributes attributes) {
+        Product changeProduct = repository.findById(id).get();
+
+        if(!img.getOriginalFilename().equals("")) {
+            String uuid = UUID.randomUUID().toString();
+            String nameOfFile = uuid + img.getOriginalFilename();
+            String filePath = uploadPath + "/" + nameOfFile;
+
+            changeProduct.setImageUrl(nameOfFile);
+            try {
+                img.transferTo(new File(filePath));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            repository.save(changeProduct);
+        }
+
+        attributes.addFlashAttribute("imgErr", "Ошибка в прочтении файла, попробуйте снова");
+        return "redirect:/admin/changeImage/" + id;
+    }
 }
