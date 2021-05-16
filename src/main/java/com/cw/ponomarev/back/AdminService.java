@@ -5,11 +5,13 @@ import com.cw.ponomarev.model.ProductType;
 import com.cw.ponomarev.model.User;
 import com.cw.ponomarev.repos.ProductRepo;
 import com.cw.ponomarev.repos.UserRepo;
+import org.apache.commons.io.FileUtils;
 import org.dom4j.rule.Mode;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,7 +19,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -96,11 +101,20 @@ public class AdminService {
     }
 
     public String deleteProd(Long id){
+        String imageUrl = uploadPath + "/" + repository.findById(id).get().getImageUrl();
         repository.deleteById(id);
+
+        FileUtils.deleteQuietly(new File(imageUrl));
         return "redirect:/admin";
     }
 
-    public String changeProductForm(Long id, Model model) {
+    public String changeProductForm(Long id, Model model, Map<String, ?> attributes) {
+        if(attributes != null) {
+            for (Map.Entry<String, ?> entry : attributes.entrySet()) {
+                model.addAttribute(entry.getKey(), entry.getValue());
+            }
+        }
+
         model.addAttribute("currentProduct", repository.findById(id).get());
         model.addAttribute("types", ProductType.values());
         return "change_product";
@@ -120,8 +134,18 @@ public class AdminService {
             redirectAttributes.addFlashAttribute("descriptionErr", "Обязательное поле для заполнения");
         }
         if(product.getType().isEmpty()){
+            flagOfErrors = true;
             redirectAttributes.addFlashAttribute("selectingTypeErr", "Необходимо выбрать тип товара");
         }
+        if(product.getNumber() == null){
+            flagOfErrors = true;
+            redirectAttributes.addFlashAttribute("numberErr", "Введите количество товара");
+        }
+        if(product.getPrice() == null){
+            flagOfErrors = true;
+            redirectAttributes.addFlashAttribute("priceErr", "Введите стоимость товара");
+        }
+
         if (!flagOfErrors){
             dataBaseProduct.setForChange(product.getType(), product.getTitle(), product.getDescription(), product.getNumber(), product.getPrice());
             repository.save(dataBaseProduct);
@@ -131,14 +155,21 @@ public class AdminService {
         return "redirect:/admin/changeProduct/" + id;
     }
 
-    public String changeImageForm(Long id, Model model){
+    public String changeImageForm(Long id, Model model, Map<String, ?> map){
+        if(map != null) {
+            for (Map.Entry<String, ?> entry : map.entrySet()) {
+                model.addAttribute(entry.getKey(), entry.getValue());
+            }
+        }
         Product productBD = repository.findById(id).get();
         model.addAttribute("product", productBD);
         return "change_image";
     }
 
     public String changeImage(Long id, MultipartFile img, RedirectAttributes attributes) {
+        boolean flagErrors = false;
         Product changeProduct = repository.findById(id).get();
+        String pastUrl = uploadPath + "/" + changeProduct.getImageUrl();
 
         if(!img.getOriginalFilename().equals("")) {
             String uuid = UUID.randomUUID().toString();
@@ -153,9 +184,21 @@ public class AdminService {
             }
 
             repository.save(changeProduct);
+            FileUtils.deleteQuietly(new File(pastUrl));
+        } else {
+            flagErrors = true;
+            attributes.addFlashAttribute("imgErr", "Файл должен иметь название и не должен быть пустым");
         }
+        if (flagErrors)
+            return "redirect:/admin/changeImage/" + id;
 
-        attributes.addFlashAttribute("imgErr", "Ошибка в прочтении файла, попробуйте снова");
-        return "redirect:/admin/changeImage/" + id;
+        return "redirect:/admin";
+    }
+
+    public String changeUserActivity(Long id) {
+        User user = userRepo.findById(id).get();
+        user.setActive(!user.isActive());
+        userRepo.save(user);
+        return "redirect:/admin/userList";
     }
 }

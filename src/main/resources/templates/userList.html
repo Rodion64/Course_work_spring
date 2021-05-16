@@ -19,13 +19,16 @@
     </thead>
     <tbody>
     <tr th:each="user : ${users}">
-        <td><span th:text="${user.id}"> ID </span></td>
-        <td><span th:text="${user.name}"> Login </span></td>
-        <td><span th:text="${user.email}"> E-mail </span></td>
-        <td><span th:text="${user.realName}"> First name </span></td>
-        <td><span th:text="${user.surname}"> Surname </span></td>
-        <td><span th:text="${user.phone}"> Phone </span></td>
-        <td><span th:text="${user.active}"> Active </span></td>
+        <form method="post" th:action="@{/admin/changeUserActivity/{id} (id = ${user.getId()})}">
+            <td><span th:text="${user.id}"> ID </span></td>
+            <td><span th:text="${user.name}"> Login </span></td>
+            <td><span th:text="${user.email}"> E-mail </span></td>
+            <td><span th:text="${user.realName}"> First name </span></td>
+            <td><span th:text="${user.surname}"> Surname </span></td>
+            <td><span th:text="${user.phone}"> Phone </span></td>
+            <td><span th:text="${user.active} ? 'Активный' : 'Забаненный'"> Active </span></td>
+            <td><input type="submit" th:value="${user.active}? 'Забанить' : 'Разбанить'"></td>
+        </form>
     </tr>
     </tbody>
 </table>

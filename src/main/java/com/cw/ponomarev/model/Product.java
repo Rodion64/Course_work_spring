@@ -53,6 +53,4 @@ public class Product {
         this.number = number;
         this.price = price;
     }
-
-
 }

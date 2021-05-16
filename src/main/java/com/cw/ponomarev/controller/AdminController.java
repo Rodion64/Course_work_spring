@@ -3,8 +3,10 @@ package com.cw.ponomarev.controller;
 import com.cw.ponomarev.back.AdminService;
 import com.cw.ponomarev.model.Product;
 import com.cw.ponomarev.model.ProductType;
+import com.cw.ponomarev.model.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,7 +46,7 @@ public class AdminController {
 
     @PostMapping("/addNewPosition")
     public String addNewPosition(@ModelAttribute @Valid Product product, Errors errors, RedirectAttributes redirectAttributes, @RequestParam(name = "image") MultipartFile file){
-         return  service.addNewPos(product, file, errors, redirectAttributes);
+         return service.addNewPos(product, file, errors, redirectAttributes);
     }
 
     @GetMapping("/userList")
@@ -63,25 +65,30 @@ public class AdminController {
     }
 
     @GetMapping("/changeProduct/{id}")
-    public String changeProduct(@PathVariable(name = "id") Long id, Model model){
-        System.out.println(id + "!!!!!!!!!!!!!!!!!!!!!");
-        return service.changeProductForm(id, model);
+    public String changeProduct(@PathVariable(name = "id") Long id, Model model, HttpServletRequest request){
+        Map<String, ?> map = RequestContextUtils.getInputFlashMap(request);
+        return service.changeProductForm(id, model, map);
     }
 
-    //Квуфудадидабифиждбц
     @PostMapping("/changeProduct/{id}")
     public String changeProduct(@ModelAttribute Product product, RedirectAttributes redirectAttributes, @PathVariable(name = "id") Long id){
-        System.out.println(product);
         return service.changeProduct(product, redirectAttributes, id);
     }
 
     @GetMapping("/changeImage/{id}")
-    public String changeImageForm(@PathVariable(name = "id") Long id, Model model){
-        return service.changeImageForm(id, model);
+    public String changeImageForm(@PathVariable(name = "id") Long id, Model model, HttpServletRequest request){
+        Map<String, ?> map = RequestContextUtils.getInputFlashMap(request);
+        return service.changeImageForm(id, model, map);
     }
 
     @PostMapping("/changeImage/{id}")
     public String changeImage(@PathVariable(name = "id") Long id, @RequestParam(name = "newImage") MultipartFile img, RedirectAttributes attributes){
+        System.out.println(img.getOriginalFilename());
         return service.changeImage(id, img, attributes);
+    }
+
+    @PostMapping("/changeUserActivity/{id}")
+    public String changeActivity(@PathVariable(name = "id") Long id){
+        return service.changeUserActivity(id);
     }
 }

@@ -62,13 +62,13 @@
         </div>
         <div>
             <label>Цена</label>
-            <input type="number" name="price" th:value="${currentPrice}">
+            <input type="number" name="price" th:value="${currentPrice}" min="0">
             <span style="color: red" th:text="${price}"></span>
         </div>
         <div>
             <label>Изображение товара</label>
             <input type="file" name="image">
-            <span style="color: red" th:text="${fileErr}"></span>
+            <span style="color: red" th:text="${image}"></span>
         </div>
         <span style="color: red" th:text="${exists}"></span>
         <input type="submit" value="Добавить">

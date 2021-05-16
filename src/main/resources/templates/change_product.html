@@ -6,7 +6,7 @@
 </head>
 <body>
     <h2>Изменение продукта</h2>
- <form th:action="@{/admin/changeProduct/{id} (id = ${currentProduct.getId()})}" th:object="${currentProduct}">
+ <form method="post" th:action="@{/admin/changeProduct/{id} (id = ${currentProduct.getId()})}" th:object="${currentProduct}">
      <div>
          <label> Product Title : <input type="text" th:field="*{title}"/> </label>
          <span style="color: red" th:text="${titleErr}"></span>
@@ -17,9 +17,11 @@
      </div>
      <div>
          <label> Number of products <input type="number" th:field="*{number}" min="0"/> </label>
+         <span style="color: red" th:text="${numberErr}"></span>
      </div>
      <div>
          <label> Price of product <input type="number" th:field="*{price}" min="0"/> </label>
+         <span style="color: red" th:text="${priceErr}"></span>
      </div>
      <select th:field="*{type}">
          <option value=""> -- </option>
