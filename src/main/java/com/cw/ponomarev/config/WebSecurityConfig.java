@@ -24,10 +24,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
-    @Override
+    @Override//change this
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
+                .antMatchers("/checkClickedButton/*", "/end", "/addToCart/*", "/cart/**").permitAll()
                 .antMatchers("/", "/test").permitAll()
                 .antMatchers("/registration").permitAll()
                 .antMatchers("/registrationAcc").permitAll()

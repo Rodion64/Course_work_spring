@@ -2,6 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <head>
     <title>Admin page</title>
+    <style>
+        .main
+            {
+              display: flex;
+              flex-direction: row;
+              flex-wrap: nowrap;
+            }
+    </style>
 </head>
 <body>
 
@@ -9,10 +17,12 @@
     <input type="submit" value="Sign Out"/>
 </form>
 
-<div th:each="prod: ${prods}">
-    <form th:action="@{/admin/checkClickedButton/{prod} (prod = ${prod})}" method="get">
-        <input type="submit" th:value="${prod}">
-    </form>
+<div class="main">
+    <div th:each="prod: ${prods}">
+        <form th:action="@{/admin/checkClickedButton/{prod} (prod = ${prod})}" method="get">
+            <input type="submit" th:value="${prod}">
+        </form>
+    </div>
 </div>
 
 <div th:each="product: ${list}" style="border: 2px dashed; padding: 10px;">

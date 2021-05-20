@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Компьютерный магазин</title>
+    <style type="text/css">
+        .main
+            {
+              display: flex;
+              flex-direction: row;
+              flex-wrap: nowrap;
+            }
+    </style>
+</head>
+<body>
+    <h1>Компьютерный магазин</h1>
+    <a href="/cart">Корзина <span th:text="${cartSize}"></span></a>
+    <span>Категории товаров</span>
+
+    <div class="main">
+        <div th:each="t: ${types}">
+            <form th:action="@{/checkClickedButton/{type} (type = ${t})}" method="get">
+                <input type="submit" th:value="${t}">
+            </form>
+        </div>
+    </div>
+
+    <div th:each="product: ${list}" style="border: 2px dashed; padding: 10px;">
+        <h3 th:text="${product.getType()}"></h3>
+        <br>
+        <span th:text="${product.getTitle()}"></span>
+        <br>
+        <img th:src="@{'/images/'+${product.getImageUrl()}}" height="400px">
+        <br>
+        <span th:text="${product.getDescription()}"></span>
+        <br>
+        Количество:
+        <span th:text="${product.getNumber()}"></span>
+        Цена:
+        <span th:text="${product.getPrice()}"></span>
+        <div th:if="${product.getNumber()} > 0">
+            <span>Есть в наличии</span><br>
+            <form th:method="post" th:action="@{/addToCart/{id} (id = ${product.getId()})}">
+                <button type="submit">Добавить в корзину</button>
+            </form>
+        </div>
+        <div th:if="${product.getNumber()} == 0">
+            <span>Нет в наличии</span><br>
+        </div>
+    </div>
+</body>
+</html>

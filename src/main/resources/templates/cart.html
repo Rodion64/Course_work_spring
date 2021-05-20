@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+Корзина
+    <span style="color: red" th:text = "${emptyCart}"></span>
+    <div style="border: 2px dashed; padding: 10px;" th:each="product : ${products}">
+        <div th:if="${product.getNumberInCart()} > 0">
+            <h3 th:text="${product.getType()}"></h3>
+            <br>
+            <span th:text="${product.getTitle()}"></span>
+            <br>
+            <img th:src="@{'/images/'+${product.getImageUrl()}}" height="400px">
+            <br>
+            <span th:text="${product.getDescription()}"></span>
+            <br>
+            Количество товаров в корзине:
+            <span th:text="${product.getNumberInCart()}"></span>
+            Количество товаров на складе:
+            <span th:text="${product.getNumberInBD()}"></span>
+            <h4 th:if="${product.getNumberInCart()} > ${product.getNumberInBD()}" style="color : red">Количество товаров на складе уменьшилось, выберите альтернативу или уменьшите количество выбранного товара. Спасибо за понимание</h4>
+            <h4>Изменить количество товаров в корзине:</h4>
+            <form th:method="post" th:action="@{/cart/changeNumberInCart/{id} (id = ${product.getId()})}">
+                <input type="number" th:name="newNumber" th:value="${product.getNumberInCart()}" min="0" th:max="${product.getNumberInBD()}"/>
+                <div><input type="submit" value="Сохранить изменения"/></div>
+            </form>
+
+            <h4>Удалить товар из корзины:</h4>
+            <form th:method="post" th:action="@{/cart/deletePosition/{id} (id = ${product.getId()})}">
+                <div><input type="submit" value="Удалить"/></div>
+            </form>
+
+            Цена:
+            <span th:text="${product.getPrice()}"></span>
+        </div>
+    </div>
+</body>
+</html>
