@@ -14,6 +14,26 @@
 </head>
 <body>
     <h1>Компьютерный магазин</h1>
+    <a href="/order/list">Посмотреть заказы</a>
+    <br>
+    <div th:if="!${isAuthorized}">
+        <a th:href="@{/login}">Login</a>
+    </div>
+
+    <div th:if="${isAuthorized}">
+        <form th:method="get" th:action="@{/user}">
+            <input type="submit" value="Редактировать профиль">
+        </form>
+        <br>
+        <form th:method="post" th:action="@{/logout}">
+            <button type="submit">Выйти</button>
+        </form>
+    </div>
+    <div th:if="${isAdmin}">
+        <a href="/admin"> Админка </a>
+    </div>
+    <br>
+
     <a href="/cart">Корзина <span th:text="${cartSize}"></span></a>
     <span>Категории товаров</span>
 

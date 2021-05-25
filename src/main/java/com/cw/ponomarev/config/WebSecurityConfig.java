@@ -28,7 +28,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/checkClickedButton/*", "/end", "/addToCart/*", "/cart/**").permitAll()
+                .antMatchers("/checkClickedButton/*", "/end", "/addToCart/*", "/cart/**", "/order/**").permitAll()
                 .antMatchers("/", "/test").permitAll()
                 .antMatchers("/registration").permitAll()
                 .antMatchers("/registrationAcc").permitAll()

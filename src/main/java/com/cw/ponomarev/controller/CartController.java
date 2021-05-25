@@ -18,8 +18,8 @@ public class CartController {
     }
 
     @GetMapping
-    public String page(@CookieValue(value = "cart", required = false) String cookie, Model model){
-        return service.getPage(cookie, model);
+    public String page(@CookieValue(value = "cart", required = false) String cookie, Model model, HttpServletResponse response){
+        return service.getPage(cookie, model, response);
     }
 
     @PostMapping("/changeNumberInCart/{id}")

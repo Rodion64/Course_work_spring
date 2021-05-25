@@ -7,6 +7,10 @@
 <body>
 Корзина
     <span style="color: red" th:text = "${emptyCart}"></span>
+    <a th:if="${visibility}" href="/order">Заказать</a>
+    <div>
+        <span style="color: red" th:text="${emptyProdErr}"></span>
+    </div>
     <div style="border: 2px dashed; padding: 10px;" th:each="product : ${products}">
         <div th:if="${product.getNumberInCart()} > 0">
             <h3 th:text="${product.getType()}"></h3>

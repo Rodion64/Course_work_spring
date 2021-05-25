@@ -5,6 +5,7 @@
     <title>Title</title>
 </head>
 <body>
+    <span style="color: green" th:text="${inputInfoMessage}"></span>
     <label>
         Login
         <p th:text="${name}"></p>
@@ -54,6 +55,7 @@
 
         <input type="submit" value="submit">
     </form>
+
 
     <form th:action="@{/user/updatePassword}" method="post">
         <h2>Блок смены пароля</h2>

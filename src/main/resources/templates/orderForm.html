@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    Оформить заказ
+    <br>
+    <span th:text="${numberErr}" style="color: red"></span>
+    <div th:each="product: ${list}" style="border: 2px dashed; padding: 5px;">
+        <h3 th:text="${product.getType()}"></h3>
+        <br>
+        <span th:text="${product.getTitle()}"></span>
+        <br>
+        Количество:
+        <span th:text="${product.getNumber()}"></span>
+        <br>
+    </div>
+    <form th:action="@{/order}" method="post" th:object="${order}">
+        <div>
+            <label> Name : <input type="text" th:field="*{name}"/> </label>
+            <span style="color: red" th:text="${name}"></span>
+        </div>
+        <div>
+            <label> Surname : <input type="text" th:field="*{surname}"/> </label>
+            <span style="color: red" th:text="${surname}"></span>
+        </div>
+        <div>
+            <label> Address: <input type="text" th:field="*{address}"/> </label>
+            <span style="color: red" th:text="${address}"></span>
+        </div>
+        <div>
+            <label> Email: <input type="email" th:field="*{email}"/> </label>
+            <span style="color: red" th:text="${email}"></span>
+        </div>
+        <div>
+            <label> Phone: <input type="tel" th:field="*{phone}"/> </label>
+            <span style="color: red" th:text="${phone}"></span>
+        </div>
+        <div><input type="submit" value="Заказать"/></div>
+    </form>
+</body>
+</html>

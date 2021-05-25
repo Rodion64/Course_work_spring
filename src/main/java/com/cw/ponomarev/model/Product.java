@@ -12,8 +12,6 @@ import java.util.Set;
 @Entity
 @Table(name = "products_pon")
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @ToString
 public class Product {
     @Id
@@ -45,6 +43,9 @@ public class Product {
 
     @Column(name = "image_url")
     private String imageUrl;
+
+    @ManyToOne
+    private Order order;
 
     public void setForChange(Set<ProductType> type, String title, String description, Long number, Long price){
         this.type = type;

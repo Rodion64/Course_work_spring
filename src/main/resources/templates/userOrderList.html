@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    Список заказов
+    <br>
+    <table>
+        <thead>
+        <tr>
+            <th> Номер заказа</th>
+            <th> Имя </th>
+            <th> Фамилия </th>
+            <th> Адресс </th>
+            <th> E-mail </th>
+            <th> Номер телефона </th>
+            <th> Статус заказа </th>
+            <th> Отмена заказа </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="order : ${orders}">
+                <td><span th:text="${order.id}"> Номер заказа </span></td>
+                <td><span th:text="${order.name}"> Имя </span></td>
+                <td><span th:text="${order.surname}"> Фамилия </span></td>
+                <td><span th:text="${order.address}"> Адресс </span></td>
+                <td><span th:text="${order.email}"> E-mail </span></td>
+                <td><span th:text="${order.phone}"> Номер телефона </span></td>
+                <td><span th:text="${order.status}"> Статус </span></td>
+                <td>
+                    <form th:action="@{/order/delete/{id} (id = ${order.id})}" method="post">
+                        <input type="submit" value="Удалить заказ">
+                    </form>
+                </td>
+        </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>

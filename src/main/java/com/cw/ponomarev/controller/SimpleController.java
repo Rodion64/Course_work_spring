@@ -67,6 +67,9 @@ public class SimpleController {
         ProductType[] productType = ProductType.values();
         model.addAttribute("types", productType);
 
+        model.addAttribute("isAuthorized", authUser.getPrincipal()!="anonymousUser");
+        model.addAttribute("isAdmin", authUser.getAuthorities().contains(Role.ADMIN));
+
         return "index";
     }
 
