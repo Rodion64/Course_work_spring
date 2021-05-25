@@ -3,19 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <title>Change Image</title>
+    <style type="text/css">
+        .btn{
+            box-sizing: border-box;
+            padding: 0 20px;
+            margin: 0 15px 15px 0;
+            outline: none;
+            border: none;
+            border-radius: 4px;
+            height: 32px;
+            line-height: 32px;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            color: #fff;
+            background-color: #3775dd;
+            box-shadow: 0 2px #21487f;
+            cursor: pointer;
+            user-select: none;
+            appearance: none;
+            touch-action: manipulation;
+            vertical-align: top;
+        }
+        .btn:hover {
+            background-color: #002fed;
+        }
+        .btn:active {
+            background-color: #2f599e !important;
+        }
+        .btn:focus-visible {
+            box-shadow: 0 0 0 3px lightskyblue;
+        }
+        .btn:disabled {
+            background-color: #6c87b5;
+            pointer-events: none;
+        }
+        .titleSpan{
+             margin : 2px;
+             font-size : 18px;
+             font-weight : bold;
+        }
+        .formCart{
+            border: 2px double;
+            padding: 7px;
+            background : white;
+        }
+        body {
+	        background: linear-gradient(-45deg, #F5F5F5, #DCDCDC, #E0FFFF);
+	        background-size: 400% 400%;
+	        animation: gradient 15s ease infinite;
+        }
+
+        @keyframes gradient {
+	        0% {
+		        background-position: 0% 50%;
+	        }
+	        50% {
+		        background-position: 100% 50%;
+	        }
+	        100% {
+		        background-position: 0% 50%;
+	        }
+}
+    </style>
 </head>
 <body>
-<form enctype="multipart/form-data" th:action = "@{/admin/changeImage/{id} (id = ${product.getId()})}" method="post" th:object = "${product}">
+<a class="btn" href="/">Вернуться на главную страницу</a>
+<br>
+<form class="formCart" enctype="multipart/form-data" th:action = "@{/admin/changeImage/{id} (id = ${product.getId()})}" method="post" th:object = "${product}">
     <div>
-        Текущее изображение товара:
-        <img th:src="@{'/images/'+${product.getImageUrl()}}" height="400px"/>
+        <span class="titleSpan">Текущее изображение товара: </span>
+        <br>
+        <img th:src="@{'/images/'+${product.getImageUrl()}}" style="height : 200px; width : 200px"/>
     </div>
     <div>
-        Новое изображение товара:
+        <span class="titleSpan">Новое изображение товара: </span>
+        <br>
         <input type="file" text="Изображение товара" name="newImage">
         <span style="color:red" th:text="${imgErr}"></span>
     </div>
-    <input type="submit">Отправить</input>
+    <br>
+    <input class="btn" type="submit" value="Сохранить">
 </form>
 </body>
 </html>

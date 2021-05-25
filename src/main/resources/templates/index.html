@@ -10,62 +10,135 @@
               flex-direction: row;
               flex-wrap: nowrap;
             }
+        .titleSpan{
+             margin : 2px;
+             font-size : 18px;
+             font-weight : bold;
+        }
+        .notTitle{
+            margin : 2px;
+            font-size : 15px;
+        }
+        .prodCart{
+            border: 2px double;
+            padding: 7px;
+            background : white;
+        }
+        body {
+	        background: linear-gradient(-45deg, #F5F5F5, #DCDCDC, #E0FFFF);
+	        background-size: 400% 400%;
+	        animation: gradient 15s ease infinite;
+        }
+
+        @keyframes gradient {
+	        0% {
+		        background-position: 0% 50%;
+	        }
+	        50% {
+		        background-position: 100% 50%;
+	        }
+	        100% {
+		        background-position: 0% 50%;
+	        }
+        .btn{
+            box-sizing: border-box;
+            padding: 0 20px;
+            margin: 0 15px 15px 0;
+            outline: none;
+            border: none;
+            border-radius: 4px;
+            height: 32px;
+            line-height: 32px;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            color: #fff;
+            background-color: #3775dd;
+            box-shadow: 0 2px #21487f;
+            cursor: pointer;
+            user-select: none;
+            appearance: none;
+            touch-action: manipulation;
+            vertical-align: top;
+        }
+        .btn:hover {
+            background-color: #002fed;
+        }
+        .btn:active {
+            background-color: #2f599e !important;
+        }
+        .btn:focus-visible {
+            box-shadow: 0 0 0 3px lightskyblue;
+        }
+        .btn:disabled {
+            background-color: #6c87b5;
+            pointer-events: none;
+        }
+
     </style>
 </head>
 <body>
     <h1>Компьютерный магазин</h1>
-    <a href="/order/list">Посмотреть заказы</a>
+    <a class="btn" href="/order/list">Посмотреть заказы</a>
     <br>
     <div th:if="!${isAuthorized}">
-        <a th:href="@{/login}">Login</a>
+        <a class="btn" th:href="@{/login}">Войти в систему</a>
     </div>
 
     <div th:if="${isAuthorized}">
         <form th:method="get" th:action="@{/user}">
-            <input type="submit" value="Редактировать профиль">
+            <input class="btn" type="submit" value="Редактировать профиль">
         </form>
         <br>
         <form th:method="post" th:action="@{/logout}">
-            <button type="submit">Выйти</button>
+            <input class="btn" type="submit" value="Выйти из системы">
         </form>
     </div>
     <div th:if="${isAdmin}">
-        <a href="/admin"> Админка </a>
+        <a class="btn" href="/admin"> Страница администратора </a>
+    </div>
+    <div th:if="${isWorker}">
+        <a class="btn" href="/worker"> Страница работника </a>
     </div>
     <br>
 
-    <a href="/cart">Корзина <span th:text="${cartSize}"></span></a>
-    <span>Категории товаров</span>
+    <a class="btn" href="/cart">Корзина <span th:text="${cartSize}"></span></a>
+    <br><br>
+    <h2>Категории товаров</h2>
 
     <div class="main">
         <div th:each="t: ${types}">
             <form th:action="@{/checkClickedButton/{type} (type = ${t})}" method="get">
-                <input type="submit" th:value="${t}">
+                <input class="btn" type="submit" th:value="${t}">
             </form>
         </div>
     </div>
 
-    <div th:each="product: ${list}" style="border: 2px dashed; padding: 10px;">
-        <h3 th:text="${product.getType()}"></h3>
+    <div th:each="product: ${list}" class="prodCart">
+        <span class="titleSpan" style="text-decoration : underline" th:text="${product.getType()}"></span>
         <br>
-        <span th:text="${product.getTitle()}"></span>
+        <span class="titleSpan">Название товара : </span>
+        <span class="titleSpan" th:text="${product.getTitle()}"></span>
         <br>
-        <img th:src="@{'/images/'+${product.getImageUrl()}}" height="400px">
+        <img th:src="@{'/images/'+${product.getImageUrl()}}" style="height : 200px; width : 200px">
         <br>
-        <span th:text="${product.getDescription()}"></span>
+        <span class="titleSpan">Описание товара : </span>
         <br>
-        Количество:
+        <span class="notTitle" th:text="${product.getDescription()}"></span>
+        <br>
+        <span class="titleSpan">Количество товара на складе : </span>
         <span th:text="${product.getNumber()}"></span>
-        Цена:
-        <span th:text="${product.getPrice()}"></span>
+        <br>
+        <span class="titleSpan">Цена товара : </span>
+        <span class="notTitle" th:text="${product.getPrice()}"></span>
         <div th:if="${product.getNumber()} > 0">
-            <span>Есть в наличии</span><br>
+            <span class="notTitle">Есть в наличии</span><br>
             <form th:method="post" th:action="@{/addToCart/{id} (id = ${product.getId()})}">
-                <button type="submit">Добавить в корзину</button>
+                <input class="btn" type="submit" value="Добавить в корзину">
             </form>
         </div>
         <div th:if="${product.getNumber()} == 0">
-            <span>Нет в наличии</span><br>
+            <span class="notTitle">Нет в наличии</span><br>
         </div>
     </div>
 </body>

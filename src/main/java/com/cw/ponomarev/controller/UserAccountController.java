@@ -22,11 +22,6 @@ public class UserAccountController {
         this.service = service;
     }
 
-    @GetMapping("")
-    public String getUserFirstPage(){
-        return "main";
-    }
-
     @GetMapping("/userAccount")
     public String getUserAccDet(Model model, HttpServletRequest request){
         User currentUser = service.getUserByName(SecurityContextHolder.getContext().getAuthentication().getName());

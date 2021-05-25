@@ -2,16 +2,16 @@ package com.cw.ponomarev.back;
 
 import com.cw.ponomarev.model.Product;
 import com.cw.ponomarev.model.ProductType;
+import com.cw.ponomarev.model.Role;
 import com.cw.ponomarev.model.User;
 import com.cw.ponomarev.repos.ProductRepo;
 import com.cw.ponomarev.repos.UserRepo;
 import org.apache.commons.io.FileUtils;
-import org.dom4j.rule.Mode;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,12 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class AdminService {
@@ -33,10 +28,12 @@ public class AdminService {
 
     private final ProductRepo repository;
     private final UserRepo userRepo;
+    private final BCryptPasswordEncoder encoder;
 
-    public AdminService(ProductRepo repository, UserRepo userRepo) {
+    public AdminService(ProductRepo repository, UserRepo userRepo, BCryptPasswordEncoder encoder) {
         this.repository = repository;
         this.userRepo = userRepo;
+        this.encoder = encoder;
     }
 
     public String addNewPos(Product product, MultipartFile file, Errors errors, RedirectAttributes redirectAttributes){
@@ -87,6 +84,9 @@ public class AdminService {
     public String userList(Model model){
         List<User> users = userRepo.findAll();
         model.addAttribute("users", users);
+
+        Role [] roles = Role.values();
+        model.addAttribute("userRoles", roles);
         return "userList";
     }
 
@@ -200,5 +200,28 @@ public class AdminService {
         user.setActive(!user.isActive());
         userRepo.save(user);
         return "redirect:/admin/userList";
+    }
+
+    public String addNewWorker(User user, Errors errors, RedirectAttributes redirectAttributes) {
+        if(errors.hasErrors()){
+            redirectAttributes.addFlashAttribute("currentName", user.getName());
+            redirectAttributes.addFlashAttribute("currentPassword", user.getPassword());
+            redirectAttributes.addFlashAttribute("currentEmail", user.getEmail());
+            redirectAttributes.addFlashAttribute("currentRealName", user.getRealName());
+            redirectAttributes.addFlashAttribute("currentSurname", user.getSurname());
+            redirectAttributes.addFlashAttribute("currentPhone", user.getPhone());
+            redirectAttributes.addFlashAttribute("currentAddress", user.getAddress());
+
+            List<FieldError> list = errors.getFieldErrors();
+            for (FieldError f : list) {
+                redirectAttributes.addFlashAttribute(f.getField(), f.getDefaultMessage());
+            }
+        } else {
+            user.setRoles(Collections.singleton(Role.WORKER));
+            user.setActive(true);
+            user.setPassword(encoder.encode(user.getPassword()));
+            userRepo.save(user);
+        }
+        return "redirect:/admin";
     }
 }

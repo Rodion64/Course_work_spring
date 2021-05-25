@@ -9,87 +9,205 @@
               flex-direction: row;
               flex-wrap: nowrap;
             }
+        body {
+	        background: linear-gradient(-45deg, #F5F5F5, #DCDCDC, #E0FFFF);
+	        background-size: 400% 400%;
+	        animation: gradient 15s ease infinite;
+        }
+
+        @keyframes gradient {
+	        0% {
+		        background-position: 0% 50%;
+	        }
+	        50% {
+		        background-position: 100% 50%;
+	        }
+	        100% {
+		        background-position: 0% 50%;
+	        }
+        .btn{
+            box-sizing: border-box;
+            padding: 0 20px;
+            margin: 0 15px 15px 0;
+            outline: none;
+            border: none;
+            border-radius: 4px;
+            height: 32px;
+            line-height: 32px;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            color: #fff;
+            background-color: #3775dd;
+            box-shadow: 0 2px #21487f;
+            cursor: pointer;
+            user-select: none;
+            appearance: none;
+            touch-action: manipulation;
+            vertical-align: top;
+        }
+        .btn:hover {
+            background-color: #002fed;
+        }
+        .btn:active {
+            background-color: #2f599e !important;
+        }
+        .btn:focus-visible {
+            box-shadow: 0 0 0 3px lightskyblue;
+        }
+        .btn:disabled {
+            background-color: #6c87b5;
+            pointer-events: none;
+        }
+        .prodCart{
+            border: 2px double;
+            padding: 7px;
+            background : white;
+        }
+        .titleSpan{
+             margin : 2px;
+             font-size : 18px;
+             font-weight : bold;
+        }
+        .notTitle{
+            margin : 2px;
+            font-size : 15px;
+        }
     </style>
 </head>
 <body>
-
+<a class="btn" href="/">Вернуться на главную страницу</a>
+<br>
 <form th:action="@{/logout}" method="post">
-    <input type="submit" value="Sign Out"/>
+    <input class="btn" type="submit" value="Sign Out"/>
 </form>
 
 <div class="main">
     <div th:each="prod: ${prods}">
         <form th:action="@{/admin/checkClickedButton/{prod} (prod = ${prod})}" method="get">
-            <input type="submit" th:value="${prod}">
+            <input class="btn" type="submit" th:value="${prod}">
         </form>
     </div>
 </div>
 
-<div th:each="product: ${list}" style="border: 2px dashed; padding: 10px;">
-    <h3 th:text="${product.getType()}"></h3>
-    <br>
-    <span th:text="${product.getTitle()}"></span>
-    <br>
-    <img th:src="@{'/images/'+${product.getImageUrl()}}" height="400px">
-    <br>
-    <span th:text="${product.getDescription()}"></span>
-    <br>
-    Количество:
-    <span th:text="${product.getNumber()}"></span>
-    Цена:
-    <span th:text="${product.getPrice()}"></span>
-    <form th:method="get" th:action="@{/admin/changeProduct/{id} (id = ${product.getId()})}">
-        <button type="submit">Редактировать товар</button>
-    </form>
-    <form th:method="post" th:action="@{/admin/deleteProduct/{id} (id = ${product.getId()})}">
-        <button type="submit">Удалить</button>
-    </form>
+<div th:each="product: ${list}">
+    <div class="prodCart">
+        <span class="titleSpan" style="text-decoration : underline" th:text="${product.getType()}"></span>
+        <br>
+        <span class="titleSpan">Название товара : </span>
+        <span class="titleSpan" th:text="${product.getTitle()}"></span>
+        <br>
+        <img th:src="@{'/images/'+${product.getImageUrl()}}" style="height : 200px; width : 200px">
+        <br>
+        <span class="titleSpan">Описание товара : </span>
+        <br>
+        <span class="notTitle" th:text="${product.getDescription()}"></span>
+        <br>
+        <span class="titleSpan">Количество товара на складе : </span>
+        <span th:text="${product.getNumber()}"></span>
+        <br>
+        <span class="titleSpan">Цена товара : </span>
+        <span class="notTitle" th:text="${product.getPrice()}"></span>
+        <form th:method="get" th:action="@{/admin/changeProduct/{id} (id = ${product.getId()})}">
+            <input type="submit" value="Редактировать товар" class="btn">
+        </form>
+        <form th:method="post" th:action="@{/admin/deleteProduct/{id} (id = ${product.getId()})}">
+            <input type="submit" value="Удалить" class="btn">
+        </form>
+    </div>
 </div>
 
-<h2>Добавить новую позицию товара</h2>
+<span style="text-decoration : underline" class="titleSpan">Добавить новую позицию товара</span>
 <div>
     <form enctype="multipart/form-data" th:action="@{/admin/addNewPosition}" method="post">
         <div>
-            <label>Тип товара</label>
+            <label class="titleSpan">Тип товара : </label>
             <select name="type">
                 <option th:each="prodd: ${prodss}" th:value = "${prodd}" th:text="${prodd}"></option>
             </select>
         </div>
         <div>
-            <label>Название товара</label>
+            <label class="titleSpan">Название товара : </label>
             <input type="text" name="title" th:value="${currentTitle}">
             <span style="color: red" th:text="${title}"></span>
         </div>
         <div>
-            <label>Описание товара</label>
+            <label class="titleSpan">Описание товара : </label>
             <input type="text" name="description" th:value="${currentDescription}">
             <span style="color: red" th:text="${description}"></span>
         </div>
         <div>
-            <label>Количество товара</label>
+            <label class="titleSpan">Количество товара : </label>
             <input type="number" name="number" min="0" th:value="${currentNumber}">
             <span style="color: red" th:text="${number}"></span>
         </div>
         <div>
-            <label>Цена</label>
+            <label class="titleSpan">Цена : </label>
             <input type="number" name="price" th:value="${currentPrice}" min="0">
             <span style="color: red" th:text="${price}"></span>
         </div>
         <div>
-            <label>Изображение товара</label>
+            <label class="titleSpan">Изображение товара : </label>
             <input type="file" name="image">
             <span style="color: red" th:text="${image}"></span>
         </div>
         <span style="color: red" th:text="${exists}"></span>
-        <input type="submit" value="Добавить">
+        <input class="btn" type="submit" value="Добавить">
     </form>
 </div>
 
 <div>
-    <a th:href="@{/admin/userList}">
-        <h2>Посмотреть список юзеров</h2>
+    <a class="btn" th:href="@{/admin/userList}">
+        <span class="titleSpan">Посмотреть список юзеров</span>
     </a>
 </div>
+<span class="titleSpan" style="text-decoration : underline">Зарегистрировать нового работника</span>
+<br>
+<form th:action = "@{/admin/addNewWorker}" method="post">
+    <div>
+        <label class="titleSpan"> Login :
+            <input type="text" name="name" th:value="${currentName}"/>
+        </label>
+        <span style="color: red" th:text="${name}"></span>
+    </div>
+    <div>
+        <label class="titleSpan"> Password :
+            <input type="text" name="password" th:value="${currentPassword}"/>
+        </label>
+        <span style="color: red" th:text="${password}"></span>
+    </div>
+    <div>
+        <label class="titleSpan"> Email :
+            <input type="text" name="email" th:value="${currentEmail}"/>
+        </label>
+        <span style="color: red" th:text="${email}"></span>
+    </div>
+    <div>
+        <label class="titleSpan"> Name :
+            <input type="text" name="realName" th:value="${currentRealName}"/>
+        </label>
+        <span style="color: red" th:text="${realName}"></span>
+    </div>
+    <div>
+        <label class="titleSpan"> Surname :
+            <input type="text" name="surname" th:value="${currentSurname}"/>
+        </label>
+        <span style="color: red" th:text="${surname}"></span>
+    </div>
+    <div>
+        <label class="titleSpan"> Phone :
+            <input type="text" name="phone" th:value="${currentPhone}"/>
+        </label>
+        <span style="color: red" th:text="${phone}"></span>
+    </div>
+    <div>
+        <label class="titleSpan"> Address :
+            <input type="text" name="address" th:value="${currentAddress}"/>
+        </label>
+        <span style="color: red" th:text="${address}"></span>
+    </div>
+    <input class="btn" type="submit" value="Добавить нового работника">
+</form>
 
 </body>
 </html>

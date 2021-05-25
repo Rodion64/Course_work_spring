@@ -3,42 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style type="text/css">
+        .btn{
+            box-sizing: border-box;
+            padding: 0 20px;
+            margin: 0 15px 15px 0;
+            outline: none;
+            border: none;
+            border-radius: 4px;
+            height: 32px;
+            line-height: 32px;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            color: #fff;
+            background-color: #3775dd;
+            box-shadow: 0 2px #21487f;
+            cursor: pointer;
+            user-select: none;
+            appearance: none;
+            touch-action: manipulation;
+            vertical-align: top;
+        }
+        .btn:hover {
+            background-color: #002fed;
+        }
+        .btn:active {
+            background-color: #2f599e !important;
+        }
+        .btn:focus-visible {
+            box-shadow: 0 0 0 3px lightskyblue;
+        }
+        .btn:disabled {
+            background-color: #6c87b5;
+            pointer-events: none;
+        }
+        .titleSpan{
+             margin : 2px;
+             font-size : 18px;
+             font-weight : bold;
+        }
+        .notTitle{
+            margin : 2px;
+            font-size : 15px;
+        }
+        .prodCart{
+            border: 2px double;
+            padding: 7px;
+            background : white;
+        }
+        body {
+	        background: linear-gradient(-45deg, #F5F5F5, #DCDCDC, #E0FFFF);
+	        background-size: 400% 400%;
+	        animation: gradient 15s ease infinite;
+        }
+
+        @keyframes gradient {
+	        0% {
+		        background-position: 0% 50%;
+	        }
+	        50% {
+		        background-position: 100% 50%;
+	        }
+	        100% {
+		        background-position: 0% 50%;
+	        }
+    </style>
 </head>
 <body>
-Корзина
+<span class="titleSpan">Корзина</span>
+<br>
+<a class="btn" href="/">Вернуться на главную страницу</a>
+<br>
     <span style="color: red" th:text = "${emptyCart}"></span>
-    <a th:if="${visibility}" href="/order">Заказать</a>
+    <a class="btn" th:if="${visibility}" href="/order">Заказать</a>
     <div>
         <span style="color: red" th:text="${emptyProdErr}"></span>
     </div>
-    <div style="border: 2px dashed; padding: 10px;" th:each="product : ${products}">
+    <div class="prodCart" th:each="product : ${products}">
         <div th:if="${product.getNumberInCart()} > 0">
-            <h3 th:text="${product.getType()}"></h3>
+            <span class="titleSpan" style="text-decoration : underline" th:text="${product.getType()}"></span>
             <br>
-            <span th:text="${product.getTitle()}"></span>
+            <span class="titleSpan">Название товара : </span>
+            <span class="titleSpan" th:text="${product.getTitle()}"></span>
             <br>
-            <img th:src="@{'/images/'+${product.getImageUrl()}}" height="400px">
+            <img th:src="@{'/images/'+${product.getImageUrl()}}" style="height : 200px; width : 200px">
             <br>
-            <span th:text="${product.getDescription()}"></span>
+            <span class="titleSpan">Описание товара : </span>
             <br>
-            Количество товаров в корзине:
-            <span th:text="${product.getNumberInCart()}"></span>
-            Количество товаров на складе:
-            <span th:text="${product.getNumberInBD()}"></span>
+            <span class="notTitle" th:text="${product.getDescription()}"></span>
+            <br>
+            <span class="titleSpan">Количество товаров в корзине: </span>
+            <span class="notTitle" th:text="${product.getNumberInCart()}"></span>
+            <br>
+            <span class="titleSpan">Количество товаров на складе: </span>
+            <span class="notTitle" th:text="${product.getNumberInBD()}"></span>
+            <br>
             <h4 th:if="${product.getNumberInCart()} > ${product.getNumberInBD()}" style="color : red">Количество товаров на складе уменьшилось, выберите альтернативу или уменьшите количество выбранного товара. Спасибо за понимание</h4>
-            <h4>Изменить количество товаров в корзине:</h4>
             <form th:method="post" th:action="@{/cart/changeNumberInCart/{id} (id = ${product.getId()})}">
-                <input type="number" th:name="newNumber" th:value="${product.getNumberInCart()}" min="0" th:max="${product.getNumberInBD()}"/>
-                <div><input type="submit" value="Сохранить изменения"/></div>
+                <label class="titleSpan">
+                    Изменить количество товара :
+                    <input type="number" th:name="newNumber" th:value="${product.getNumberInCart()}" min="0" th:max="${product.getNumberInBD()}"/>
+                </label>
+                <div><input class="btn" type="submit" value="Сохранить изменения"/></div>
             </form>
 
-            <h4>Удалить товар из корзины:</h4>
             <form th:method="post" th:action="@{/cart/deletePosition/{id} (id = ${product.getId()})}">
-                <div><input type="submit" value="Удалить"/></div>
+                <div><input class="btn" type="submit" value="Удалить товар из корзины"/></div>
             </form>
 
-            Цена:
-            <span th:text="${product.getPrice()}"></span>
+            <span class="titleSpan">Цена : </span>
+            <span class="notTitle" th:text="${product.getPrice()}"></span>
         </div>
     </div>
 </body>

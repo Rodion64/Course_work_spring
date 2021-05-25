@@ -3,32 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style type="text/css">
+    .btn{
+            box-sizing: border-box;
+            padding: 0 20px;
+            margin: 0 15px 15px 0;
+            outline: none;
+            border: none;
+            border-radius: 4px;
+            height: 32px;
+            line-height: 32px;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            color: #fff;
+            background-color: #3775dd;
+            box-shadow: 0 2px #21487f;
+            cursor: pointer;
+            user-select: none;
+            appearance: none;
+            touch-action: manipulation;
+            vertical-align: top;
+        }
+        .btn:hover {
+            background-color: #002fed;
+        }
+        .btn:active {
+            background-color: #2f599e !important;
+        }
+        .btn:focus-visible {
+            box-shadow: 0 0 0 3px lightskyblue;
+        }
+        .btn:disabled {
+            background-color: #6c87b5;
+            pointer-events: none;
+        }
+	    table {
+	        width: 100%;
+	        border: 2px double black;
+	        text-align: center;
+        }
+        table th {
+	        font-weight: bold;
+	        padding: 2px;
+	        background: #efefef;
+	        border: 2px double black;
+        }
+        table td {
+	        border: 2px double black;
+	        padding: 2px;
+        }
+        body {
+	        background: linear-gradient(-45deg, #F5F5F5, #DCDCDC, #E0FFFF);
+	        background-size: 400% 400%;
+	        animation: gradient 15s ease infinite;
+
+        }
+
+        @keyframes gradient {
+	        0% {
+		        background-position: 0% 50%;
+	        }
+	        50% {
+		        background-position: 100% 50%;
+	        }
+	        100% {
+		        background-position: 0% 50%;
+	        }
+    </style>
 </head>
 <body>
+<a class="btn" href="/">Вернуться на главную страницу</a>
+<br>
+<a class="btn" href="/admin">Вернуться на страницу администратора </a>
+<br>
 <table>
     <thead>
     <tr>
         <th> ID </th>
+        <th> Роль </th>
         <th> Login </th>
         <th> E-mail </th>
         <th> First name </th>
         <th> Surname </th>
         <th> Phone </th>
-        <th> Active </th>
+        <th > Active </th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="user : ${users}">
         <form method="post" th:action="@{/admin/changeUserActivity/{id} (id = ${user.getId()})}">
-            <td><span th:text="${user.id}"> ID </span></td>
-            <td><span th:text="${user.name}"> Login </span></td>
-            <td><span th:text="${user.email}"> E-mail </span></td>
-            <td><span th:text="${user.realName}"> First name </span></td>
-            <td><span th:text="${user.surname}"> Surname </span></td>
-            <td><span th:text="${user.phone}"> Phone </span></td>
-            <td><span th:text="${user.active} ? 'Активный' : 'Забаненный'"> Active </span></td>
-            <td><input type="submit" th:value="${user.active}? 'Забанить' : 'Разбанить'"></td>
-        </form>
+            <td><span  th:text="${user.id}"> ID </span></td>
+            <td><span  th:text="${user.roles}"> Роль </span></td>
+            <td><span  th:text="${user.name}"> Login </span></td>
+            <td><span  th:text="${user.email}"> E-mail </span></td>
+            <td><span  th:text="${user.realName}"> First name </span></td>
+            <td><span  th:text="${user.surname}"> Surname </span></td>
+            <td><span  th:text="${user.phone}"> Phone </span></td>
+            <td>
+                <span  th:text="${user.active} ? 'Активный' : 'Забаненный'"> Active </span>
+                <br>
+                <input class="btn" type="submit" th:value="${user.active}? 'Забанить' : 'Разбанить'">
+            </td>
+       </form>
     </tr>
     </tbody>
 </table>

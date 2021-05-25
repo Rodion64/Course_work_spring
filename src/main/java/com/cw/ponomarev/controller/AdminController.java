@@ -3,6 +3,7 @@ package com.cw.ponomarev.controller;
 import com.cw.ponomarev.back.AdminService;
 import com.cw.ponomarev.model.Product;
 import com.cw.ponomarev.model.ProductType;
+import com.cw.ponomarev.model.Role;
 import com.cw.ponomarev.model.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -87,8 +88,13 @@ public class AdminController {
         return service.changeImage(id, img, attributes);
     }
 
-    @PostMapping("/changeUserActivity/{id}")
+    @PostMapping("/changeUserActivity/{id}/")
     public String changeActivity(@PathVariable(name = "id") Long id){
         return service.changeUserActivity(id);
+    }
+
+    @PostMapping("/addNewWorker")
+    public String registrNewWorker(@ModelAttribute @Valid User user, Errors errors, RedirectAttributes redirectAttributes){
+        return service.addNewWorker(user, errors, redirectAttributes);
     }
 }

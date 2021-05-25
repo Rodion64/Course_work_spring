@@ -34,7 +34,6 @@ public class SimpleController {
         this.cartService = cartService;
     }
 
-
     @GetMapping("/registration")
     public String registrationForm() {
         return "registration";
@@ -69,6 +68,7 @@ public class SimpleController {
 
         model.addAttribute("isAuthorized", authUser.getPrincipal()!="anonymousUser");
         model.addAttribute("isAdmin", authUser.getAuthorities().contains(Role.ADMIN));
+        model.addAttribute("isWorker", authUser.getAuthorities().contains(Role.WORKER));
 
         return "index";
     }

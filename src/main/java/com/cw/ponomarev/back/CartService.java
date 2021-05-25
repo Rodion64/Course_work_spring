@@ -6,11 +6,6 @@ import com.cw.ponomarev.repos.ProductRepo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import javax.annotation.PostConstruct;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
@@ -19,7 +14,7 @@ import java.util.*;
 public class CartService {
     @Value("${cookies.name}")
     private String cartName;
-    private final ProductRepo productRepo;  //change this
+    private final ProductRepo productRepo;
 
     public CartService(ProductRepo productRepo) {
         this.productRepo = productRepo;

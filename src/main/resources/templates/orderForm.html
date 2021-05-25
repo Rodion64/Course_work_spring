@@ -3,42 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style type="text/css">
+        .titleSpan{
+             margin : 2px;
+             font-size : 18px;
+             font-weight : bold;
+        }
+        .notTitle{
+            margin : 2px;
+            font-size : 15px;
+        }
+        .prodCart{
+            border: 2px double;
+            padding: 7px;
+            background: #D3CCE3;  /* fallback for old browsers */
+            background: -webkit-linear-gradient(to right, #E9E4F0, #D3CCE3);  /* Chrome 10-25, Safari 5.1-6 */
+            background: linear-gradient(to right, #E9E4F0, #D3CCE3); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        }
+
+        .btn{
+            box-sizing: border-box;
+            padding: 0 20px;
+            margin: 0 15px 15px 0;
+            outline: none;
+            border: none;
+            border-radius: 4px;
+            height: 32px;
+            line-height: 32px;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            color: #fff;
+            background-color: #3775dd;
+            box-shadow: 0 2px #21487f;
+            cursor: pointer;
+            user-select: none;
+            appearance: none;
+            touch-action: manipulation;
+            vertical-align: top;
+        }
+        .btn:hover {
+            background-color: #002fed;
+        }
+        .btn:active {
+            background-color: #2f599e !important;
+        }
+        .btn:focus-visible {
+            box-shadow: 0 0 0 3px lightskyblue;
+        }
+        .btn:disabled {
+            background-color: #6c87b5;
+            pointer-events: none;
+        }
+        body {
+	        background: linear-gradient(-45deg, #F5F5F5, #DCDCDC, #E0FFFF);
+	        background-size: 400% 400%;
+	        animation: gradient 15s ease infinite;
+        }
+
+        @keyframes gradient {
+	        0% {
+		        background-position: 0% 50%;
+	        }
+	        50% {
+		        background-position: 100% 50%;
+	        }
+	        100% {
+		        background-position: 0% 50%;
+	        }
+    </style>
 </head>
 <body>
-    Оформить заказ
+<a class="btn" href="/">Вернуться на главную страницу</a>
+<br>
+<a class="btn" href="/cart">Вернуться в корзину</a>
+<br>
+    <span class="titleSpan">Оформить заказ</span>
     <br>
     <span th:text="${numberErr}" style="color: red"></span>
-    <div th:each="product: ${list}" style="border: 2px dashed; padding: 5px;">
-        <h3 th:text="${product.getType()}"></h3>
+    <div th:each="product: ${list}" class=".prodCart">
+        <span class="titleSpan" style="text-decoration : underline" th:text="${product.getType()}"></span>
         <br>
-        <span th:text="${product.getTitle()}"></span>
+        <span class="titleSpan">Описание товара : </span>
+        <span class="notTitle" th:text="${product.getTitle()}"></span>
         <br>
-        Количество:
+        <span class="titleSpan">Количество : </span>
         <span th:text="${product.getNumber()}"></span>
         <br>
     </div>
     <form th:action="@{/order}" method="post" th:object="${order}">
         <div>
-            <label> Name : <input type="text" th:field="*{name}"/> </label>
+            <label class="notTitle"> Name : <input type="text" th:field="*{name}"/> </label>
             <span style="color: red" th:text="${name}"></span>
         </div>
         <div>
-            <label> Surname : <input type="text" th:field="*{surname}"/> </label>
+            <label class="notTitle"> Surname : <input type="text" th:field="*{surname}"/> </label>
             <span style="color: red" th:text="${surname}"></span>
         </div>
         <div>
-            <label> Address: <input type="text" th:field="*{address}"/> </label>
+            <label class="notTitle"> Address: <input type="text" th:field="*{address}"/> </label>
             <span style="color: red" th:text="${address}"></span>
         </div>
         <div>
-            <label> Email: <input type="email" th:field="*{email}"/> </label>
+            <label class="notTitle"> Email: <input type="email" th:field="*{email}"/> </label>
             <span style="color: red" th:text="${email}"></span>
         </div>
         <div>
-            <label> Phone: <input type="tel" th:field="*{phone}"/> </label>
+            <label class="notTitle"> Phone: <input type="tel" th:field="*{phone}"/> </label>
             <span style="color: red" th:text="${phone}"></span>
         </div>
-        <div><input type="submit" value="Заказать"/></div>
+        <div><input class="btn" type="submit" value="Заказать"/></div>
     </form>
 </body>
 </html>

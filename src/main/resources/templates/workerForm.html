@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
-      xmlns:form="http://www.w3.org/1999/html">
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
-    <title>Registration</title>
     <meta charset="UTF-8">
+    <title>Title</title>
     <style type="text/css">
         .titleSpan{
              margin : 2px;
@@ -17,9 +16,7 @@
         .prodCart{
             border: 2px double;
             padding: 7px;
-            background: #D3CCE3;  /* fallback for old browsers */
-            background: -webkit-linear-gradient(to right, #E9E4F0, #D3CCE3);  /* Chrome 10-25, Safari 5.1-6 */
-            background: linear-gradient(to right, #E9E4F0, #D3CCE3); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+            background : white;
         }
 
         .btn{
@@ -76,29 +73,42 @@
     </style>
 </head>
 <body>
+<span class="titleSpan">Список заказов пользователей</span>
+<br><br>
 <a class="btn" href="/">Вернуться на главную страницу</a>
 <br>
-<span style="color: red" th:name="errorAcc"></span>
-<form action="/registrationAcc" method="get">
+
+<form class="prodCart" th:action="@{/worker/changeStatus/{id} (id = ${order.id})}" method="post" th:each="order : ${orders}">
     <div>
-        <label class="notTitle"> User Name : <input type="text" name="name" th:value="${currentName}"/> </label>
-        <span style="color: red" th:text="${name}"></span>
+    <div>
+        <label class="notTitle"> Номер заказа : </label>
+        <span style="display : block" th:text="${order.id}" name="name"></span>
+        <span style="color: red" th:text="${title}"></span>
     </div>
     <div>
-        <label class="notTitle"> E-mail: <input type="text" name="email" th:value="${currentEmail}"/> </label>
-        <span style="color: red" th:text="${email}"></span>
+        <label class="notTitle"> Имя : </label>
+        <span style="display : block" th:text="${order.name}" name="name"></span>
+        <span style="color: red" th:text="${title}"></span>
     </div>
     <div>
-        <label class="notTitle"> Password: <input type="password" name="password" th:value="${currentPassword}"/> </label>
-        <span style="color: red" th:text="${password}"></span>
+        <label class="notTitle"> Фамилия : </label>
+        <span style="display : block" th:text="${order.surname}" name="surname"></span>
+        <span style="color: red" th:text="${description}"></span>
     </div>
     <div>
-        <label class="notTitle">Admin: <input type="checkbox" name="role" value="ADMIN"/></label>
+        <label class="notTitle"> Адрес : </label>
+        <span style="display : block" th:text="${order.address}" name="address"></span>
+        <span style="color: red" th:text="${number}"></span>
     </div>
-    <div>
-        <label class="notTitle">User: <input type="checkbox" name="role" value="USER"/></label>
+        <div>
+            <label class="titleSpan">Изменить статус заказа :</label>
+            <select name="status">
+                <option th:each="curStatus: ${statuses}" th:value = "${curStatus}" th:text="${curStatus}"></option>
+            </select>
+        </div>
+    <input class="btn" type="submit" value="Изменить">
+    <br>
     </div>
-    <div><input class="btn" type="submit" value="Sign In"/></div>
 </form>
 </body>
 </html>
