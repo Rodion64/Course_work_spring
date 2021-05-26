@@ -85,7 +85,7 @@ public class OrderService {
         String message = String.format("Спасибо, что выбрали именно нас!\n" +
                 "Номер вашего заказа : " + order.getId() + '.' +
                 "\nСумма вашего заказа : " + getFullyOrderCost(products) + '.' +
-                "\nТовары : " + getTitlesForMail(products) + '.' +
+                "\nТовары : " + getTitlesForMail(products) +
                 "\nСкоро с вами свяжется наш оператор, ожидайте звонка.");
         String email = "";
         if(user != null){

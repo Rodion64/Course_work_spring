@@ -70,6 +70,7 @@
 	        100% {
 		        background-position: 0% 50%;
 	        }
+	    }
     </style>
 </head>
 <body>
@@ -81,24 +82,25 @@
 <form class="prodCart" th:action="@{/worker/changeStatus/{id} (id = ${order.id})}" method="post" th:each="order : ${orders}">
     <div>
     <div>
-        <label class="notTitle"> Номер заказа : </label>
-        <span style="display : block" th:text="${order.id}" name="name"></span>
-        <span style="color: red" th:text="${title}"></span>
+        <label class="titleSpan"> Номер заказа : </label>
+        <span class="notTitle" style="display : block" th:text="${order.id}" name="id"></span>
+    </div>
+        <div>
+            <label class="titleSpan"> Текущий статус заказа : </label>
+            <span class="notTitle" style="display : block" th:text="${order.status}" name="status"></span>
+
+        </div>
+    <div>
+        <label class="titleSpan"> Имя : </label>
+        <span class="notTitle" style="display : block" th:text="${order.name}" name="name"></span>
     </div>
     <div>
-        <label class="notTitle"> Имя : </label>
-        <span style="display : block" th:text="${order.name}" name="name"></span>
-        <span style="color: red" th:text="${title}"></span>
+        <label class="titleSpan"> Фамилия : </label>
+        <span class="notTitle" style="display : block" th:text="${order.surname}" name="surname"></span>
     </div>
     <div>
-        <label class="notTitle"> Фамилия : </label>
-        <span style="display : block" th:text="${order.surname}" name="surname"></span>
-        <span style="color: red" th:text="${description}"></span>
-    </div>
-    <div>
-        <label class="notTitle"> Адрес : </label>
-        <span style="display : block" th:text="${order.address}" name="address"></span>
-        <span style="color: red" th:text="${number}"></span>
+        <label class="titleSpan"> Адрес : </label>
+        <span class="notTitle" style="display : block" th:text="${order.address}" name="address"></span>
     </div>
         <div>
             <label class="titleSpan">Изменить статус заказа :</label>
