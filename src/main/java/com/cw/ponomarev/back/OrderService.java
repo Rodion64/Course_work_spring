@@ -18,17 +18,56 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
+/**
+ * Класс, который содержит логику работы оформления заказа.
+ * @author Денис Пономарев
+ */
 @Service
 @RequiredArgsConstructor
 public class OrderService {
+    /**
+     * @see CartService
+     */
     private final CartService cartService;
+    /**
+     * Репозиторий, который содержит все записи заказов.
+     * @see Order
+     * @see OrderStatus
+     */
     private final OrderRepo orderRepo;
+    /**
+     * Репозиторий, который содержит все записи продуктов.
+     * @see Product
+     */
     private final ProductRepo productRepo;
+    /**
+     * @see MailService
+     */
     private final MailService mailService;
 
+    /**
+     * Название поля, которое хранится в cookie.
+     */
     @Value("${cookie.orders.name}")
     private String orderName;
 
+    /**
+     * Метод оформления заказа.
+     * @param user - пользователь, который оформляет заказ.
+     * @param order - заказ.
+     * @param errors - ошибки, которые приходят с фронта в случае, если что-то не так с заказом.
+     * @param cart - строка cookie, которая хранит id товаров в корзине, разделенных '_'.
+     * @param orderCookie - строка, которая хранит товары заказа.
+     * @param model - MVC класс, в который добавляются атрибуты для отображения на странице
+     * @param response - ответ, который возвращается пользователю (строка в cookie).
+     * @param attributes - атрибуты, которые заполняются и в дальнейшем выдаются пользователю на странице.
+     * @return Несколько вариантов: если в БД имеется надлежащее кол-во товаров, то заказ дополняется полями пользователя и
+     * статуса, заказ сохраняется в БД и пользователю на mail отправляется уведомление, корзина очищается. Сервис возвращает главную страницу.
+     * Другой вариант - в БД не хватает товаров, поэтому в attributes добавляется атрибут 'numberErr' и возвращается страница оформления заказа.
+     * @see User
+     * @see Order
+     * @see CartService
+     */
     public String placeOrder(User user, Order order, Errors errors, String cart, String orderCookie, Model model, HttpServletResponse response, RedirectAttributes attributes) {
         if(errors.hasErrors()){
             List<FieldError> list = errors.getFieldErrors();
@@ -112,6 +151,16 @@ public class OrderService {
         return sum;
     }
 
+    /**
+     * Метод, который возвращает страницу с заказами. Логика зависит от того, авторизован пользователь или нет (для авторизованного
+     * пользователя заказы берутся из БД, для неавторизованного - из cookie-файла).
+     * @param user - пользователь, заказы которого необходимо посмотреть.
+     * @param cookie - строка, которая содержит заказы неавторизованного пользователя.
+     * @param model - MVC класс, в который добавляются атрибуты для отображения на странице (orders).
+     * @return Страница со всеми заказами.
+     * @see User
+     * @see Order
+     */
     public String getOrderList(User user, String cookie, Model model) {
         List<Order> orders = new ArrayList<>();
         if (user != null){
@@ -134,6 +183,15 @@ public class OrderService {
         return Arrays.asList(cookie.split("_"));
     }
 
+    /**
+     * Метод, который удаляет заказ по его уникальному идентификатору, логика делится в зависимости от того,
+     * авторизован пользователь (удаляется из БД) или нет (удаляется из cookie).
+     * @param id - уникальный идентификатор заказа, который надо удалить.
+     * @param cookie - строка, которая содержит заказы неавторизованного пользователя.
+     * @param user - пользователь системы
+     * @param response - ответ, который возвращается пользователю (строка в cookie).
+     * @return Страница, содержащая заказы пользователя системы.
+     */
     public String deleteOrder(Long id, String cookie, User user, HttpServletResponse response) {
         if (user != null){
             orderRepo.deleteById(id);

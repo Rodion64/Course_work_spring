@@ -10,16 +10,39 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
+/**
+ * Класс, содержащий логику работы корзины как для авторизованных, так и для неавторизованных пользователей.
+ * @author Denis Ponomarev
+ */
 @Service
 public class CartService {
+    /**
+     * Поле, содержащее название поля cookie, которое будет храниться во время сессии.
+     */
     @Value("${cookies.name}")
     private String cartName;
+    /**
+     * Репозиторий, содержащий все продукты в БД.
+     * @see Product
+     */
     private final ProductRepo productRepo;
 
+    /**
+     * Конструктор класса, который автоматически внедряет зависимости.
+     * @param productRepo - {@link #productRepo}
+     */
     public CartService(ProductRepo productRepo) {
         this.productRepo = productRepo;
     }
 
+    /**
+     * Метод добавления товара в корзину.
+     * @param cart - список товаров (их id), уже добавленных в корзину, разделенные нижним подчеркиванием.
+     * @param id - уникальный идентификатор нового товара, который необходимо добавить.
+     * @param response - ответ, который возвращается пользователю (в cookie будет храниться новое значение).
+     * @return Возвращает пользователя на главную страницу.
+     * @see Cookie
+     */
     public String add(String cart, Long id, HttpServletResponse response){
         Cookie cookie = new Cookie(cartName,
                 (cart != null ? cart : "") + id + "_");
@@ -33,6 +56,13 @@ public class CartService {
         return Arrays.asList(cookie.split("_"));
     }
 
+    /**
+     * Метод, ищущий продукты, id которых содержится в корзине.
+     * @param cookie - строка, содержащая id товаров в корзине, разделенных нижним подчеркиванием.
+     * @return Возвращает map, которая содержит два параметра: первый, ключ которого "res", а value - лист продуктов, количество
+     * которых имеется в бд; второй, ключ которого "err", а value - лист продуктов, количество которых не содержится в бд.
+     * @see Product
+     */
     public Map<String, List<Product>> getProductsMap(String cookie){
         List<String> listOfIDs = new ArrayList<>(getListOfIDs(cookie));
 
@@ -67,6 +97,14 @@ public class CartService {
         return resultMap;
     }
 
+    /**
+     * Метод, который возвращает размер заполненной корзины.
+     * @param cart - строка cookie-файла с id товаров, разделенных '_'.
+     * @param response - ответ, который возвращается пользователю (в cookie будет храниться новое значение).
+     * @return Размер корзины (в случае, если в БД товаров меньше, то размер корзины изменится)
+     * {@link #getListOfIDs(String)}
+     * @see Cookie
+     */
     public Integer getSize(String cart, HttpServletResponse response){
         if(cart != null && !cart.isBlank()) {
             boolean changes = false;
@@ -113,6 +151,16 @@ public class CartService {
         return 0;
     }
 
+    /**
+     * Метод, возвращающий страницу корзины товаров.
+     * @param cart - строка cookie-файла с id товаров, разделенных '_'.
+     * @param model - MVC класс, в который добавляются атрибуты для отображения на странице (emptyProdErr).
+     * @param response - ответ, который вернется пользователю (строка в cookie).
+     * @return Возвращает страницу корзины товаров (если корзина пустая, то в model добавится атрибут emptyCart, или если
+     * товар больше не существует в бд, то он удалится из корзины и в model добавится атрибут emptyProdErr).
+     * @see CartProduct
+     * @see Product
+     */
     public String getPage(String cart, Model model, HttpServletResponse response) {
         if(cart == null || cart.isBlank()){
             model.addAttribute("visibility", false);
@@ -170,7 +218,14 @@ public class CartService {
         return "cart";
     }
 
-
+    /**
+     * Метод изменения количества товара в корзине.
+     * @param id - уникальный идентификатор продукта, количество которого надо изменить.
+     * @param newNumber - новое количество товара.
+     * @param cookie - строка cookie-файла с id товаров, разделенных '_'.
+     * @param response - ответ, который вернется пользователю (строка в cookie).
+     * @return Страницу корзины с товарами.
+     */
     public String changeNumberProduct(Long id, Long newNumber, String cookie, HttpServletResponse response) {
         changing(id, newNumber, cookie, response);
         return "redirect:/cart";
@@ -193,6 +248,10 @@ public class CartService {
         response.addCookie(newCookie);
     }
 
+    /**
+     * Метод, очищающий корзину товаров.
+     * @param response - ответ, который вернется пользователю (строка в cookie).
+     */
     public void clear(HttpServletResponse response){
         Cookie cookie = new Cookie(cartName, "");
         cookie.setPath("/");
