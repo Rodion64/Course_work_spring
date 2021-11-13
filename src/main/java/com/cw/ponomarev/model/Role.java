@@ -7,7 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
  * @see User
  */
 public enum Role implements GrantedAuthority {
-    USER, ADMIN, WORKER;
+    USER, ADMIN, WORKER, PR5;
 
     /**
      * Метод, возвращающий роль.

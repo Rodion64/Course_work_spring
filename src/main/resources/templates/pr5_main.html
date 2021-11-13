@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body onload="changeBackground()">
+    <span th:text="${translatedHi}"></span>
+    <div>
+        <form th:action="@{/pr5/dark}" method="get">
+            <input type="submit" th:value="${translatedDark}">
+        </form>
+        <form th:action="@{/pr5/light}" method="get">
+            <input type="submit" th:value="${translatedLight}">
+        </form>
+    </div>
+
+    <div>
+        <form th:action="@{/pr5/ru}" method="get">
+            <input type="submit" th:value="${translatedRu}">
+        </form>
+        <form th:action="@{/pr5/en}" method="get">
+            <input type="submit" th:value="${translatedEn}">
+        </form>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" th:action="@{/pr5/saveFile}">
+        <input type="file" name="pdf" multiple>
+        <input type="submit" th:value="${translatedSaveFile}">
+    </form>
+
+    <div>
+        <table>
+            <thead>
+            <tr>
+                <th th:text="${translatedTitle}"></th>
+                <th th:text="${translatedHref}"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="file : ${files}">
+                <td th:text="${file.fileName}"/>
+                <td><a th:href="@{/pr5/downloadFile/{id} (id=${file.id})}" th:text="${translatedDownload}"></a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <script>
+        function changeBackground() {
+            let color = '[[${backgroundColor}]]';
+            if (color == 'dark') {
+                document.body.style.backgroundColor = '#1a1919';
+                document.body.style.color = 'white';
+            }
+            else if (color == 'light') {
+                document.body.style.backgroundColor = 'white';
+                document.body.style.color = 'black';
+            }
+        }
+    </script>
+</body>
+</html>

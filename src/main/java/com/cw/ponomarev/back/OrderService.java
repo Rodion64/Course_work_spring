@@ -169,7 +169,7 @@ public class OrderService {
             if(cookie != null || !cookie.isEmpty()){
                 List<String> orderIDs = getOrderIDs(cookie);
                 for(String id: orderIDs){
-                    if(!id.isEmpty() || !id.isBlank()){
+                    if(!id.isEmpty()){
                         orders.add(orderRepo.findById(Long.parseLong(id)).get());
                     }
                 }

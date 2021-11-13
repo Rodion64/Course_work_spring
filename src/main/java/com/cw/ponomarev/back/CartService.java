@@ -106,7 +106,7 @@ public class CartService {
      * @see Cookie
      */
     public Integer getSize(String cart, HttpServletResponse response){
-        if(cart != null && !cart.isBlank()) {
+        if(cart != null) {
             boolean changes = false;
 
             List<String> listOfIDs = getListOfIDs(cart);
@@ -162,7 +162,7 @@ public class CartService {
      * @see Product
      */
     public String getPage(String cart, Model model, HttpServletResponse response) {
-        if(cart == null || cart.isBlank()){
+        if(cart == null){
             model.addAttribute("visibility", false);
             model.addAttribute("emptyCart", "Корзина пуста. Добавьте товары и возвращайтесь)");
         } else{

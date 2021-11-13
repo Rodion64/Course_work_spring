@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -53,6 +54,11 @@ public class SimpleController {
                              HttpServletResponse response,
                              Model model){
         Authentication authUser = SecurityContextHolder.getContext().getAuthentication();
+        if (authUser.getAuthorities().contains(Role.PR5)) {
+            checkCookies(response);
+            return "redirect:/pr5";
+        }
+
         model.addAttribute("cartSize", cartService.getSize(cart, response));
 
         if(RequestContextUtils.getInputFlashMap(request) != null){
@@ -72,6 +78,36 @@ public class SimpleController {
 
         return "index";
     }
+
+    private void checkCookies(HttpServletResponse response) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String translation = "";
+        String backgroundColor = "";
+        String name = "";
+
+        translation = "ru";
+        Cookie cookie1 = new Cookie("translation", translation);
+        cookie1.setPath("/pr5");
+        cookie1.setMaxAge(86400);
+        response.addCookie(cookie1);
+        response.setContentType("text/plain");
+
+
+        backgroundColor = "light";
+        Cookie cookie2 = new Cookie("backgroundColor", backgroundColor);
+        cookie2.setMaxAge(86400);
+        cookie2.setPath("/pr5");
+        response.addCookie(cookie2);
+        response.setContentType("text/plain");
+
+        name = authentication.getName();
+        Cookie cookie3 = new Cookie("name", name);
+        cookie3.setPath("/pr5");
+        cookie3.setMaxAge(86400);
+        response.addCookie(cookie3);
+        response.setContentType("text/plain");
+    }
+
 
     @GetMapping("/checkClickedButton/{type}")
     public String checkType(Model model, @PathVariable(name = "type") ProductType type, RedirectAttributes redirectAttributes){
